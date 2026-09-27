@@ -1,5 +1,5 @@
 [project]
-name = "pkb"
+name = "eleven-naoke"
 version = "0.1.0"
 description = "个人本地 RAG 知识库：Markdown 载体 + 全离线语义检索 + MCP 集成"
 readme = "README.md"

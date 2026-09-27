@@ -1,4 +1,4 @@
-# pkb — 个人本地 RAG 知识库
+# Eleven-naoke — 个人本地 RAG 知识库
 
 把你的 Markdown 笔记变成一个**全离线、可语义检索、Agent 可直接调用**的个人知识库。
 
