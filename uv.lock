@@ -475,6 +475,39 @@ wheels = [
 ]
 
 [[package]]
+name = "eleven-naoke"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "fastembed" },
+    { name = "lancedb" },
+    { name = "mcp" },
+    { name = "pyarrow" },
+    { name = "pyyaml" },
+    { name = "sentence-transformers" },
+    { name = "typer" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "fastembed", specifier = ">=0.4" },
+    { name = "lancedb", specifier = ">=0.15" },
+    { name = "mcp", specifier = ">=1.2" },
+    { name = "pyarrow", specifier = ">=17" },
+    { name = "pyyaml", specifier = ">=6" },
+    { name = "sentence-transformers", specifier = ">=3.3" },
+    { name = "typer", specifier = ">=0.12" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8" }]
+
+[[package]]
 name = "fastembed"
 version = "0.8.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1549,39 +1582,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/08/14/f6ba68107680ffa74b39985f3f30884e41318fbc4250caa423c79b4788bb/pillow-12.3.0-pp311-pypy311_pp73-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:e7e480451b9fa137494bccd3a7d69adbe8ac65a87d97be61e11f1b1050a5bac3", size = 5860358, upload-time = "2026-07-01T11:56:32.68Z" },
     { url = "https://files.pythonhosted.org/packages/36/54/0169bc772ec491108b62f644f8ecf1fe5d8ae5ebafde2ee2142210166903/pillow-12.3.0-pp311-pypy311_pp73-win_amd64.whl", hash = "sha256:04f01d28a6aaff387bf842a13be313df23ba0597a44f1a976c9feb3c6ff4711a", size = 7231786, upload-time = "2026-07-01T11:56:35.046Z" },
 ]
-
-[[package]]
-name = "pkb"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "fastembed" },
-    { name = "lancedb" },
-    { name = "mcp" },
-    { name = "pyarrow" },
-    { name = "pyyaml" },
-    { name = "sentence-transformers" },
-    { name = "typer" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "pytest" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "fastembed", specifier = ">=0.4" },
-    { name = "lancedb", specifier = ">=0.15" },
-    { name = "mcp", specifier = ">=1.2" },
-    { name = "pyarrow", specifier = ">=17" },
-    { name = "pyyaml", specifier = ">=6" },
-    { name = "sentence-transformers", specifier = ">=3.3" },
-    { name = "typer", specifier = ">=0.12" },
-]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=8" }]
 
 [[package]]
 name = "pluggy"

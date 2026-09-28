@@ -10,3 +10,6 @@ dist/
 .kb/
 
 # 模型缓存由 fastembed 管理在用户目录，无需入库
+
+# IDE
+.idea/
