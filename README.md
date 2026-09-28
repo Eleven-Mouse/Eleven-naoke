@@ -1,14 +1,6 @@
 <div align="center">
 
-```text
-███████╗██╗     ███████╗███████╗██╗   ██╗███████╗
-██╔════╝██║     ██╔════╝██╔════╝██║   ██║██╔════╝
-█████╗  ██║     █████╗  █████╗  ██║   ██║███████╗
-██╔══╝  ██║     ██╔══╝  ██╔══╝  ██║   ██║╚════██║
-███████╗███████╗███████╗██║     ╚██████╔╝███████║
-╚══════╝╚══════╝╚══════╝╚═╝      ╚═════╝ ╚══════╝
-n a o k e  ·  your offline second brain
-```
+<img src="assets/banner.svg" alt="ELEVEN naoke · your offline second brain" width="440">
 
 ### 把 Markdown 笔记炼成 **全离线 · 语义检索 · Agent 可调用** 的个人知识库
 
@@ -122,7 +114,8 @@ wiki/
   "model": "unsloth/embeddinggemma-300m",
   "backend": "sentence-transformers",
   "rerank": true,
-  "reranker_model": "Qwen/Qwen3-Reranker-0.6B"
+  "reranker_model": "Qwen/Qwen3-Reranker-0.6B",
+  "reranker_temperature": 2.5
 }
 ```
 
@@ -130,7 +123,7 @@ wiki/
 <summary><b>🧩 模型选型细节与深坑记录（点开）</b></summary>
 
 - **embedding**：`google/embeddinggemma-300m` 官方权重在 HuggingFace 是门控模型（需登录并接受许可）；默认配置使用 `unsloth/embeddinggemma-300m` 镜像（同一权重，开箱即用）。如需合规使用官方源，接受许可后 `huggingface-cli login` 再改回 `google/embeddinggemma-300m` 即可。注意 Gemma 许可证条款对使用方式的约束。
-- **reranker**：`Qwen/Qwen3-Reranker-0.6B`（Apache-2.0）。checkpoint 本体是 CausalLM，按官方模型卡通过 "yes/no" token 概率对比计算相关度。
+- **reranker**：`Qwen/Qwen3-Reranker-0.6B`（Apache-2.0）。checkpoint 本体是 CausalLM，按官方模型卡通过 "yes/no" token 概率对比计算相关度；logit 差经温度缩放（`reranker_temperature`，默认 2.5）后过 sigmoid，实测裸 logit 差约 ±7.5，除以 2.5 后分数展开到 ~0.05–0.95，不再全部饱和成 1.00。
 - **轻量模式**：`backend` 改为 `fastembed`、`model` 改为 `BAAI/bge-small-zh-v1.5`、`rerank` 改为 `false`，总体积 ~100MB，速度更快，精度略降。
 - 查询扩展（用本地 LLM 改写问句）暂未实现，属可选增强。
 
@@ -140,6 +133,7 @@ wiki/
 
 ## 🗺️ Roadmap
 
+- [x] rerank 分数温度缩放（`reranker_temperature`，默认 T=2.5，强匹配不再饱和成 1.00）
 - [ ] 关键词 + 向量混合检索（SQLite FTS5）
 - [ ] 查询扩展（可选接 Ollama 改写口语化问句）
 - [ ] `kb add <file>` 从任意目录吸收知识并自动归类

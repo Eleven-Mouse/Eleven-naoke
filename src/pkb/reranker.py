@@ -13,6 +13,10 @@ import numpy as np
 
 _INSTRUCT = "Given a web search query, retrieve relevant passages that answer the query"
 
+# 温度缩放：真实查询上 yes/no logit 差约在 ±7.5，除以 T=2.5 后落在 ±3，
+# sigmoid 展开到 ~0.05–0.95，避免强匹配全部饱和成 1.00、无法区分优劣。
+DEFAULT_TEMPERATURE = 2.5
+
 # Qwen3-Reranker 模型卡要求的对话模板
 _PREFIX = (
     "<|im_start|>system\nJudge whether the Document meets the requirements based on "
@@ -26,8 +30,22 @@ class Reranker(Protocol):
     def rerank(self, query: str, texts: list[str]) -> np.ndarray: ...
 
 
+def yes_no_score(true_v, false_v, temperature: float = DEFAULT_TEMPERATURE) -> np.ndarray:
+    """yes/no logit 差经温度缩放后过 sigmoid，映射到 [0,1] 相关度。
+
+    接受 torch 张量或 ndarray，返回 float64 ndarray；独立成纯函数便于单测。
+    """
+    z = (true_v - false_v).detach().cpu().numpy() if hasattr(true_v, "detach") else np.asarray(true_v) - np.asarray(false_v)
+    return 1.0 / (1.0 + np.exp(-z / temperature))
+
+
 class Qwen3Reranker:
-    def __init__(self, model_name: str = "Qwen/Qwen3-Reranker-0.6B", max_length: int = 1024):
+    def __init__(
+        self,
+        model_name: str = "Qwen/Qwen3-Reranker-0.6B",
+        max_length: int = 1024,
+        temperature: float = DEFAULT_TEMPERATURE,
+    ):
         import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -41,9 +59,10 @@ class Qwen3Reranker:
         self._max_length = max_length
         self._true_id = self._tokenizer.encode("yes", add_special_tokens=False)[0]
         self._false_id = self._tokenizer.encode("no", add_special_tokens=False)[0]
+        self.temperature = temperature
 
     def rerank(self, query: str, texts: list[str]) -> np.ndarray:
-        """返回每条 text 的相关度得分（softmax 到 [0,1]）。"""
+        """返回每条 text 的相关度得分（logit 差温度缩放后 sigmoid 到 [0,1]）。"""
         if not texts:
             return np.zeros(0, dtype=np.float32)
         pairs = [
@@ -65,11 +84,8 @@ class Qwen3Reranker:
                 logits = self._model(**inputs, num_logits_to_keep=1).logits[:, -1, :]
         true_v = logits[:, self._true_id]
         false_v = logits[:, self._false_id]
-        probs = self._torch.softmax(
-            self._torch.stack([false_v, true_v], dim=1).float(), dim=1
-        )
-        return probs[:, 1].numpy()
+        return yes_no_score(true_v, false_v, self.temperature)
 
 
-def create_reranker(model_name: str) -> Reranker:
-    return Qwen3Reranker(model_name)
+def create_reranker(model_name: str, temperature: float = DEFAULT_TEMPERATURE) -> Reranker:
+    return Qwen3Reranker(model_name, temperature=temperature)

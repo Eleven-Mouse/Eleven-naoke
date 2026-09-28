@@ -100,7 +100,7 @@ def search(
     reranker = None
     if use_rerank:
         typer.echo(f"加载重排模型 {config.reranker_model}…")
-        reranker = create_reranker(config.reranker_model)
+        reranker = create_reranker(config.reranker_model, config.reranker_temperature)
     hits = semantic_search(
         config, embedder, query, top_k=top_k, collection=collection, reranker=reranker
     )
@@ -172,7 +172,11 @@ if __name__ == "__main__":
 def search_json(query: str, top_k: int | None = None, collection: str | None = None) -> str:
     config = _config()
     embedder = create_embedder(config.model, config.backend)
-    reranker = create_reranker(config.reranker_model) if config.rerank else None
+    reranker = (
+        create_reranker(config.reranker_model, config.reranker_temperature)
+        if config.rerank
+        else None
+    )
     hits = semantic_search(
         config, embedder, query, top_k=top_k, collection=collection, reranker=reranker
     )

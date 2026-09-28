@@ -18,6 +18,8 @@ DEFAULT_COLLECTION = "demo"
 DEFAULT_MODEL = "google/embeddinggemma-300m"
 DEFAULT_BACKEND = "sentence-transformers"
 DEFAULT_RERANKER = "Qwen/Qwen3-Reranker-0.6B"
+# rerank 温度缩放默认值，与 reranker.DEFAULT_TEMPERATURE 保持一致（避免循环导入）
+DEFAULT_RERANK_TEMPERATURE = 2.5
 
 
 class KBError(Exception):
@@ -31,6 +33,7 @@ class Config:
     backend: str = DEFAULT_BACKEND
     rerank: bool = True
     reranker_model: str = DEFAULT_RERANKER
+    reranker_temperature: float = DEFAULT_RERANK_TEMPERATURE
     default_top_k: int = 5
     chunk_max_chars: int = 800
     excluded_patterns: list[str] = field(default_factory=list)
@@ -67,6 +70,7 @@ def load_config(root: Path) -> Config:
         backend=raw.get("backend", DEFAULT_BACKEND),
         rerank=raw.get("rerank", True),
         reranker_model=raw.get("reranker_model", DEFAULT_RERANKER),
+        reranker_temperature=raw.get("reranker_temperature", DEFAULT_RERANK_TEMPERATURE),
         default_top_k=raw.get("default_top_k", 5),
         chunk_max_chars=raw.get("chunk_max_chars", 800),
         excluded_patterns=raw.get("excluded_patterns", []),
@@ -80,6 +84,7 @@ def save_config(config: Config) -> None:
         "backend": config.backend,
         "rerank": config.rerank,
         "reranker_model": config.reranker_model,
+        "reranker_temperature": config.reranker_temperature,
         "default_top_k": config.default_top_k,
         "chunk_max_chars": config.chunk_max_chars,
         "excluded_patterns": config.excluded_patterns,
