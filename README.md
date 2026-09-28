@@ -1,5 +1,6 @@
 <div align="center">
 
+```text
   ███████╗██╗     ███████╗███████╗██╗   ██╗███████╗
   ██╔════╝██║     ██╔════╝██╔════╝██║   ██║██╔════╝
   █████╗  ██║     █████╗  █████╗  ██║   ██║███████╗
@@ -7,7 +8,7 @@
   ███████╗███████╗███████╗██║     ╚██████╔╝███████║
   ╚══════╝╚══════╝╚══════╝╚═╝      ╚═════╝ ╚══════╝
         n a o k e  ·  your offline second brain
-
+```
 
 ### 把 Markdown 笔记炼成 **全离线 · 语义检索 · Agent 可调用** 的个人知识库
 
@@ -145,21 +146,6 @@ wiki/
 接入这两个模型时踩过两个深坑（Qwen3-Reranker 分类头缺失、EmbeddingGemma 门控），完整记录见 [docs/model-pitfalls.md](docs/model-pitfalls.md)。
 
 </details>
-
-## 🧱 技术栈
-
-<div align="center">
-
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Typer](https://img.shields.io/badge/CLI-Typer-FF4B4B?style=for-the-badge)
-![LanceDB](https://img.shields.io/badge/Vector-LanceDB-0C0C0C?style=for-the-badge)
-![Sentence Transformers](https://img.shields.io/badge/Embedding-Sentence%20Transformers-FFD21E?style=for-the-badge)
-![FastEmbed](https://img.shields.io/badge/Light-FastEmbed-00A67E?style=for-the-badge)
-![MCP](https://img.shields.io/badge/Agent-MCP-8A2BE2?style=for-the-badge)
-![uv](https://img.shields.io/badge/Build-uv-DE5FE9?style=for-the-badge)
-![pytest](https://img.shields.io/badge/Test-pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white)
-
-</div>
 
 ## 🗺️ Roadmap
 
